@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://prefab_scenes/player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://prefab_scenes/wall.tscn" type="PackedScene" id=2]
+[ext_resource path="res://prefab_scenes/chipsEnemy.tscn" type="PackedScene" id=3]
+[ext_resource path="res://prefab_scenes/EnemySpawner.tscn" type="PackedScene" id=4]
+[ext_resource path="res://prefab_scenes/DroppedWeaponTest.tscn" type="PackedScene" id=5]
+
+[sub_resource type="PhysicsMaterial" id=1]
+friction = 0.0
+
+[node name="Node" type="Node"]
+__meta__ = {
+"_edit_horizontal_guides_": [  ],
+"_edit_vertical_guides_": [  ],
+"_editor_description_": "collision list:
+1 - general (walls,, gravity)
+
+2 - all objects which can be hit or destroyed with a player attack 
+
+3 - all objects which can be hit by an enemy attack
+
+5 - the player itself (colides and detects colisions)
+
+9 - all objects you can stand on (jump refresh detection)"
+}
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 713, 442 )
+mass = 20.0
+physics_material_override = SubResource( 1 )
+
+[node name="Node2D" parent="." instance=ExtResource( 2 )]
+position = Vector2( 549, 566 )
+scale = Vector2( 20.5049, 0.906593 )
+
+[node name="Node2D2" parent="." instance=ExtResource( 2 )]
+position = Vector2( 247, 444 )
+scale = Vector2( 2.34488, 0.426594 )
+
+[node name="Node2D3" parent="." instance=ExtResource( 2 )]
+position = Vector2( 854, 362 )
+scale = Vector2( 2.34488, 0.426594 )
+
+[node name="Node2D4" parent="." instance=ExtResource( 2 )]
+position = Vector2( 854, 491 )
+scale = Vector2( 2.34488, 0.426594 )
+
+[node name="testDummy" parent="." instance=ExtResource( 3 )]
+position = Vector2( 610, 398 )
+
+[node name="EnemySpawner" parent="." instance=ExtResource( 4 )]
+
+[node name="DroppedWeapon" parent="." instance=ExtResource( 5 )]
+position = Vector2( 455, 290 )
+
+[node name="DroppedWeapon2" parent="." instance=ExtResource( 5 )]
+position = Vector2( 358, 176 )

@@ -1,0 +1,200 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://icon.png" type="Texture" id=1]
+[ext_resource path="res://prefab_scenes/player_controller.gd" type="Script" id=2]
+[ext_resource path="res://custom_nodes/hitBox.gd" type="Script" id=3]
+[ext_resource path="res://custom_nodes/hurtBox.gd" type="Script" id=4]
+
+[sub_resource type="PhysicsMaterial" id=2]
+friction = 0.0
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 29.6739, 26.5 )
+
+[sub_resource type="Animation" id=3]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0.156863 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("bodyCollision2:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ true ]
+}
+
+[sub_resource type="Animation" id=4]
+resource_name = "fist_attack"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.2 ),
+"transitions": PoolRealArray( 3.97335, 4.14105 ),
+"update": 0,
+"values": [ Color( 0.913725, 0.207843, 0.0941176, 0.584314 ), Color( 1, 1, 1, 0.156863 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("bodyCollision2:disabled")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ false, true ]
+}
+
+[sub_resource type="RectangleShape2D" id=5]
+extents = Vector2( 24, 30 )
+
+[sub_resource type="Animation" id=6]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=7]
+resource_name = "get_hit"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1.86607, 1 ),
+"update": 0,
+"values": [ Color( 0.854902, 0.176471, 0.176471, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[node name="Player" type="RigidBody2D" groups=["player"]]
+collision_layer = 16
+collision_mask = 21
+mode = 2
+physics_material_override = SubResource( 2 )
+continuous_cd = 2
+script = ExtResource( 2 )
+speed = 600.0
+jump_force = 600.0
+friction_custom = 2000.0
+friction_multiplier = 1.7
+
+[node name="Camera2D" type="Camera2D" parent="."]
+visible = false
+current = true
+process_mode = 0
+drag_margin_h_enabled = true
+drag_margin_v_enabled = true
+smoothing_speed = 20.0
+offset_v = -0.59
+drag_margin_left = 0.1
+drag_margin_top = 1.0
+drag_margin_right = 0.1
+drag_margin_bottom = 0.51
+editor_draw_limits = true
+editor_draw_drag_margin = true
+
+[node name="Sprite" type="Sprite" parent="."]
+unique_name_in_owner = true
+texture = ExtResource( 1 )
+
+[node name="hitBox" type="Area2D" parent="Sprite"]
+unique_name_in_owner = true
+collision_layer = 2
+collision_mask = 0
+script = ExtResource( 3 )
+damage = 20
+
+[node name="bodyCollision2" type="CollisionShape2D" parent="Sprite/hitBox"]
+position = Vector2( 51, 1 )
+shape = SubResource( 1 )
+disabled = true
+
+[node name="Sprite" type="Sprite" parent="Sprite/hitBox"]
+modulate = Color( 1, 1, 1, 0.156863 )
+position = Vector2( 51, 1 )
+scale = Vector2( 0.931768, 0.833484 )
+texture = ExtResource( 1 )
+
+[node name="TempHitboxAnim" type="AnimationPlayer" parent="Sprite/hitBox"]
+unique_name_in_owner = true
+anims/RESET = SubResource( 3 )
+anims/fist_attack = SubResource( 4 )
+
+[node name="hurtBox" type="Area2D" parent="Sprite"]
+visible = false
+collision_layer = 0
+collision_mask = 4
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Sprite/hurtBox"]
+shape = SubResource( 5 )
+
+[node name="bodyCollision" type="CollisionShape2D" parent="."]
+unique_name_in_owner = true
+visible = false
+position = Vector2( 0, 1.5 )
+shape = SubResource( 1 )
+
+[node name="JumpDetection" type="Area2D" parent="."]
+unique_name_in_owner = true
+visible = false
+position = Vector2( 0, 2 )
+scale = Vector2( 0.920001, 1 )
+collision_layer = 0
+collision_mask = 256
+
+[node name="bodyCollision2" type="CollisionShape2D" parent="JumpDetection"]
+unique_name_in_owner = true
+position = Vector2( 0, 1.5 )
+shape = SubResource( 1 )
+
+[node name="DashTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.5
+one_shot = true
+
+[node name="AttackCooldownTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 0.2
+one_shot = true
+
+[node name="GettingHitAnim" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+anims/RESET = SubResource( 6 )
+anims/get_hit = SubResource( 7 )
+
+[connection signal="body_exited" from="JumpDetection" to="." method="_on_ground_stop_touching"]
